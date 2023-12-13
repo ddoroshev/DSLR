@@ -27,10 +27,14 @@ timeago = "^1.0.15"
 tomli = "^2.0.1"
 psycopg2 = { version = "^2.9.3", optional = true }
 psycopg2-binary = { version = "^2.9.3", optional = true }
+psycopg = { version = "^3.1.14", optional = true }
+psycopg-binary = { version = "^3.1.14", optional = true }
 
 [tool.poetry.extras]
 psycopg2 = ["psycopg2"]
 psycopg2-binary = ["psycopg2-binary"]
+psycopg = ["psycopg"]
+psycopg-binary = ["psycopg-binary"]
 
 [tool.poetry.dev-dependencies]
 isort = "^5.10.1"

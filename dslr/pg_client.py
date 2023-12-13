@@ -1,7 +1,12 @@
 from typing import Any, List, Optional, Tuple
 
-import psycopg2
-import psycopg2.extensions
+try:
+    import psycopg as psycopg
+    PSYCOPG_VER = 3
+except ImportError:
+    import psycopg2 as psycopg
+    import psycopg2.extensions
+    PSYCOPG_VER = 2
 
 from dslr.console import console
 
@@ -20,14 +25,17 @@ class PGClient:
         self.password = password
         self.dbname = dbname
 
-        self.conn = psycopg2.connect(
+        self.conn = psycopg.connect(
             host=host,
             port=port,
             user=user,
             password=password,
             dbname=dbname,
         )
-        self.conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+        if PSYCOPG_VER == 2:
+            self.conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+        else:
+            self.conn.set_autocommit(True)
 
         self.cur = self.conn.cursor()
 
@@ -40,7 +48,7 @@ class PGClient:
 
         try:
             result = self.cur.fetchall()
-        except psycopg2.ProgrammingError:
+        except psycopg.ProgrammingError:
             result = None
 
         return result
